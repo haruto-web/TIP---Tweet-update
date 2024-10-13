@@ -3,9 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="login.css">
+    <title>TIP - Login</title>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="left">
+            <h1>TIP Twitter</h1>
+            <p>Connect with your campus community.</p>
+        </div>
+        <div class="right">
+            <div class="login-content">
+                <h1>Welcome to TIP Twitter</h1>
+                <form id="login-form">
+                    <input type="email" id="login-email" placeholder="TIP Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit">Log In</button>
+                </form>
+                <p id="login-message"></p>
+                <p>Don't have an account? <a href="register.html">Create one</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzPswltJP0qRkgbCxAPjkv8ih1FRJLtdc",
+            authDomain: "tip---tweet-49b02.firebaseapp.com",
+            projectId: "tip---tweet-49b02",
+            storageBucket: "tip---tweet-49b02.appspot.com",
+            messagingSenderId: "60948382906",
+            appId: "1:60948382906:web:08eb0e906010708a58ae83",
+            measurementId: "G-GY1N6PB8P2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const loginForm = document.getElementById("login-form");
+        const loginMessage = document.getElementById("login-message");
+
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                loginMessage.textContent = "User logged in successfully!";
+                sessionStorage.setItem('user', userCredential.user.email);
+                window.location.href = "homepage.html";
+            } catch (error) {
+                loginMessage.textContent = error.message;
+            }
+        });
+    </script>
 </body>
 </html>

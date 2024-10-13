@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="register.css">
+    <title>TIP - Register</title>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1>Join TIP Twitter</h1>
+        </div>
+        <div class="right">
+            <div class="register-content">
+                <h2>Create Your TIP Twitter Account</h2>
+                <form id="register-form">
+                    <input type="text" id="first-name" placeholder="First Name" required>
+                    <input type="text" id="last-name" placeholder="Last Name" required>
+                    <input type="email" id="register-email" placeholder="TIP Email (your-email@tip.edu.ph)" required>
+                    <select id="college-year" required>
+                        <option value="" disabled selected>Select College Year</option>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                        <option value="5">Other</option>
+                    </select>
+                    <input type="password" id="register-password" placeholder="Password" required>
+                    <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+                    <button type="submit" id="register-btn">Register</button>
+                </form>
+                <p id="register-message"></p>
+                <p>Already have an account? <a href="login.html">Log in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzPswltJP0qRkgbCxAPjkv8ih1FRJLtdc",
+            authDomain: "tip---tweet-49b02.firebaseapp.com",
+            projectId: "tip---tweet-49b02",
+            storageBucket: "tip---tweet-49b02.appspot.com",
+            messagingSenderId: "60948382906",
+            appId: "1:60948382906:web:08eb0e906010708a58ae83",
+            measurementId: "G-GY1N6PB8P2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const registerForm = document.getElementById("register-form");
+        const registerMessage = document.getElementById("register-message");
+
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("register-email").value;
+            const password = document.getElementById("register-password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                registerMessage.textContent = "Passwords do not match.";
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                registerMessage.textContent = "User registered successfully!";
+                sessionStorage.setItem('user', userCredential.user.email);
+                window.location.href = "homepage.html";
+            } catch (error) {
+                registerMessage.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>

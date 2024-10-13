@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="homepage.css">
+    <title>TIP - Tweet_Home</title>
+</head>
+<body>
+    <header>
+        <h1>TIP Twitter</h1>
+        <button id="logout-button">Log Out</button>
+        <p><a href="login.html">Login</a> | <a href="register.html">Register</a></p>
+    </header>
+
+    <main>
+        <section id="tweet-form">
+            <h2>Post a Tweet</h2>
+            <form id="form">
+                <textarea id="tweet-input" rows="4" placeholder="What's happening?" required></textarea>
+                <button type="submit">Tweet</button>
+            </form>
+        </section>
+
+        <section id="tweets">
+            <h2>Tweets</h2>
+            <ul id="tweet-list"></ul>
+        </section>
+    </main>
+
+    <script type="module">
+        // Import the necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzPswltJP0qRkgbCxAPjkv8ih1FRJLtdc",
+            authDomain: "tip---tweet-49b02.firebaseapp.com",
+            projectId: "tip---tweet-49b02",
+            storageBucket: "tip---tweet-49b02.appspot.com",
+            messagingSenderId: "60948382906",
+            appId: "1:60948382906:web:08eb0e906010708a58ae83",
+            measurementId: "G-GY1N6PB8P2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        
+        // Check if user is logged in
+        if (!sessionStorage.getItem('user')) {
+            alert("You must log in to access this page.");
+            window.location.href = "login.html";
+        }
+    
+        const form = document.getElementById('form');
+        const tweetInput = document.getElementById('tweet-input');
+        const tweetList = document.getElementById('tweet-list');
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const tweetText = tweetInput.value;
+            if (tweetText) {
+                const tweetItem = document.createElement('li');
+                tweetItem.textContent = tweetText;
+                tweetList.appendChild(tweetItem);
+                tweetInput.value = ''; // Clear input field
+            }
+        });
+    
+        // Log out functionality
+        const logoutButton = document.getElementById('logout-button');
+        logoutButton.addEventListener('click', function() {
+            sessionStorage.removeItem('user');
+            alert("You have logged out successfully.");
+            window.location.href = "login.html";
+        });
+    </script>
+</body>
+</html>
